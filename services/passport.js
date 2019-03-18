@@ -24,7 +24,9 @@ passport.deserializeUser((id, done) => {
 passport.use(new GoogleStrategy({
   clientID: keys.googleClientID,
   clientSecret: keys.googleClientSecret,
-  callbackURL: '/auth/google/callback'
+  callbackURL: '/auth/google/callback',
+  proxy: true
+  //בוטח בנתיבים הכוללים פרוקסי כדי שלא ישנו מHTTPS לHTTP
 }, (accessToken, refreshToken, profile, done) => {
   User.findOne({ googleId: profile.id })
     //לא לשכפל רשומה של יוזר קיים
