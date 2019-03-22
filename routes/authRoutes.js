@@ -8,13 +8,19 @@ module.exports = (app) => {
   );
   //ניסיון התחברות בעזרת פספורט
 
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  app.get('/auth/google/callback',
+    passport.authenticate('google'),
+    (req, res) => {
+      res.redirect('/surveys');
+      //רידיירקט מעביר את היוזר למקום אחר אחרי שהוא עובר בהצלחה את הנתיב הזה
+    }
+  );
   //ראוט לקלבאק אחרי שחזרנו בהצלחה מהשרת של גוגל, כעת נחזור עם קוורי סטרינג ופספורט
-  //יזהה את זה אוטומטי
+  //יזהה את זה אוטומטי, כעת תרוץ הפונקציה בארגיומנט השני בקובץ פספורט
 
   app.get('/api/logout', (req, res) => {
     req.logout();
-    res.send(req.user);
+    res.redirect('/');
   });
 
   app.get('/api/current_user', (req, res) => {

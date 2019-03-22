@@ -27,18 +27,20 @@ passport.use(new GoogleStrategy({
   callbackURL: '/auth/google/callback',
   proxy: true
   //בוטח בנתיבים הכוללים פרוקסי כדי שלא ישנו מHTTPS לHTTP
-}, (accessToken, refreshToken, profile, done) => {
-  User.findOne({ googleId: profile.id })
-    //לא לשכפל רשומה של יוזר קיים
-    .then((existingUser) => {
-      if (existingUser) {
-        done(null, existingUser);
-        //פוקנציית דאן מקבלת שתי ארגיומנטים הראשון האם הייתה תקלה והשני הוא היוזר
-      } else {
-        new User({ googleId: profile.id })
-          .save()
-          .then(user => done(null, user));
-      }
-    })
+}, async (accessToken, refreshToken, profile, done) => {
+  //פונקציה אשר פועלת כאשר היוזר חוזר עם הקוד של גוגל מהשרת של גוגל לאחר מתן האישור
+  //כאשר יש לנו את הקוד נבצע בקשה נוספת לשרת של גוגל עוד הקוד וכאשר גוגל יראה
+  //שיש ברשותנו את הקוד ניתן לקבל פרטים על היוזר
+  const existingUser = await User.findOne({ googleId: profile.id })
+  //לא לשכפל רשומה של יוזר קיים
+  if (existingUser) {
+    done(null, existingUser);
+    //פוקנציית דאן מקבלת שתי ארגיומנטים הראשון האם הייתה תקלה והשני הוא היוזר
+  } else {
+    const user = await new User({ googleId: profile.id }).save()
+      .done(null, user);
+    //יוצר רשומה במונגו שרושמת את האיידי של גוגל על מנת ליצור את הקוקי עבור
+    //אותו יוזר
+  }
 })
 );
