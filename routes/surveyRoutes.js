@@ -21,7 +21,6 @@ module.exports = app => {
     res.send('Thanks for voting!');
   })
 
-  //מקבל את הבקשה מסנדגריד ומעביר אלינו את הבקשה עם האידי של היוזר והתשובה
   app.post('/api/surveys/webhooks', (req, res) => {
     const p = new Path('/api/surveys/:surveyId/:choice');
 
@@ -33,9 +32,7 @@ module.exports = app => {
         }
       })
       .compact()
-      //מוריד את כל האובייקטים שהם אנדיפיינד
       .uniqBy('email', 'surveyId')
-      //מוריד רשומות כפולות הכוללות אותו אימייל ואותו סרבי איידי
       .each(({ surveyId, email, choice }) => {
         Survey.updateOne({
           _id: surveyId,
@@ -61,9 +58,7 @@ module.exports = app => {
       subject,
       body,
       recipients: recipients.split(',').map(email => ({ email: email.trim() })),
-      //להפוך את המערך לאובייקטים עם קי של אימייל והערך שהתקבל
       _user: req.user.id,
-      //לאיזה יוזר הסקר מוסיף
       dateSent: Date.now()
     });
 

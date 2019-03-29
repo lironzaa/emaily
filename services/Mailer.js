@@ -13,17 +13,13 @@ class Mailer extends helper.Mail {
     this.recipients = this.formatAddresses(recipients);
 
     this.addContent(this.body);
-    //פונקציה מובנת המשייכת את הקונטנט לבודי
     this.addClickTracking();
-    //פונקציית עזר אשר מגדירים
     this.addRecipients();
-    //פונקציית עזר אשר מגדירים
   }
 
   formatAddresses(recipients) {
     return recipients.map(({ email }) => {
       return new helper.Email(email);
-      //מקבלת רק את הערך של המיילים עצמם
     });
   }
 
@@ -32,7 +28,6 @@ class Mailer extends helper.Mail {
     const clickTracking = new helper.ClickTracking(true, true);
     trackingSettings.setClickTracking(clickTracking);
     this.addTrackingSettings(trackingSettings);
-    //הגדרות של הלחצנים במיילים
   }
 
   addRecipients() {
@@ -41,7 +36,6 @@ class Mailer extends helper.Mail {
       personalize.addTo(recipient);
     });
     this.addPersonalization(personalize);
-    //הגדרות שמוסיפות את הנמענים
   }
 
   async send() {

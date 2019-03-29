@@ -10,9 +10,7 @@ class Payments extends React.Component {
         name="Emaily"
         description="5$ for 5 email credits"
         amount={500}
-        //* סכום הכסף המבוקש
         token={token => this.props.handleToken(token)}
-        // פונקציית הקל באק שתפעל אחרי שנחזור מסטריפ ועוד פרטים 
         stripeKey={process.env.REACT_APP_STRIPE_KEY}
       >
         <button className="btn">

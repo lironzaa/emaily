@@ -9,14 +9,10 @@ module.exports = app => {
       currency: 'usd',
       description: '$5 for 5 credits',
       source: req.body.id
-      //הטוקן שמאשר את התשלום
     })
 
     req.user.credits += 5;
-    //יוזר מגיע מפספורט
     const user = await req.user.save();
-    //שמירה של היוזר מחדש במונגו
     res.send(user);
-    //שליחה של הנתונים לדפדפן
   })
 };
